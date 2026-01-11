@@ -23,26 +23,29 @@ function getFetch() {
                 data.weight,
                 data.types,
                 data.sprites.other['official-artwork'].front_default,
-                data.location_area_encounters,
+                data.location_area_encounters
             )
-            //! and this
+            //! and this methods extend down throuhj inheritnace th enew method is now new pokeInfo not new poke
             newPoke.getTypes()
             newPoke.isHousePet()
-            newPoke.encounterInfo()
+            // newPoke.encounterInfo() 
+            //only called if housepet is true
 
             let decision = ''
             if (newPoke.housePet) {
-                decision = `This is a good housepet as it's small enough at ${newPoke.h} and weighs ${newPoke.w}`
+                decision = `This is a good housepet as it's small enough at ${newPoke.h} and weighs ${newPoke.w} you can find the pokemon in the follwoing location`
+                newPoke.encounterInfo() 
             } else {
-                decision = `not a good housepet because ${newPoke.reason.join(' and ')}`
+                decision = `not a good housepet due ${newPoke.reason.join(' and ')}`
             }
+            document.querySelector('.location').innerText = ''
             //DisplayInDOom
             document.querySelector('h2').innerText = newPoke.name
             document.querySelector('img').src = newPoke.image
             document.querySelector('h3').innerText = newPoke.typeList
             document.querySelector('h4').innerText = decision
             //document.querySelector('h4').innerText = newPoke.typeList.join(', ')
-            //TODO document.querySelector('.location').innerText = 
+            
         })
 }
 
@@ -101,6 +104,7 @@ class Poke {
 //Extenstion and Inheritance add additonal functioanlty to our poke class this is a common method as to not wmess working code above, the extend methods adds further functionalityby pulling the informatio from the code above below to further mannilnalte
 //! reyuires the key words super and extend
 
+
 class PokeInfo extends Poke{
     constructor(name, height, weight, types, image,location){
         super(name,height,weight,types,image); //inhreit propeties frmo above
@@ -114,34 +118,32 @@ class PokeInfo extends Poke{
             fetch(this.locationURL)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 for(const item of data){
                     this.locationList.push(item.location_area.name)
                 }
-                console.log(this.locationList)
-                console.log(this.locationCleanUp())
+
+                let target = document.querySelector('.location') 
+                //.innerText = this.locationCleanUp()
+                target.innerText = this.locationCleanUp() 
+
             })
         }
+
+        //TODO document.querySelector('.location').innerText = 
 
         locationCleanUp() {
             //?slice takes intow params start(0) and end(5)
             const words = this.locationList
             .slice(0,5)
-            .join('-')
-            .split('-')
+            .join(', ')
+            .replaceAll('-',' ')
+            .split(' ')
 
-            // words.forEach(e => {
-            //     console.log(e[0].toUpperCase() + e.slice(1))
-            
-            // })
-
-            for(let i = 0; i <words.length;i++){
-                const capL = words[i][0].toUpperCase()
-                const add = capL + capL[i].slice(1)
-                return add
+            for(let i = 0; i < words.length; i++) { ;
+                words[i] = words[i][0].toUpperCase() + words[i].slice(1)
             }
-
-
+            return words.join(' ')
         }
+        
 
     }
