@@ -23,7 +23,7 @@ function getFetch() {
                 data.weight,
                 data.types,
                 data.sprites.other['official-artwork'].front_default,
-                data.location_area_encounters
+                data.location_area_encounters,
             )
             //! and this
             newPoke.getTypes()
@@ -138,9 +138,9 @@ class PokeInfo extends Poke{
             for(let i = 0; i <words.length;i++){
                 const capL = words[i][0].toUpperCase()
                 const add = capL + capL[i].slice(1)
+                return add
             }
 
-            return words
 
         }
 
